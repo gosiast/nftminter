@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const FileUpload = () => {
 	const [file, setFile] = useState(null);
+	const [cid, setCid] = useState("");
 	//it will handle the submition of the file
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -15,7 +16,10 @@ const FileUpload = () => {
 				})
 					.then((response) => response.json())
 					.then((data) => {
+						setCid(data.cid);
+						setTransaction(data.transactionHash);
 						console.log(data.cid);
+						console.log(data.transactionHash);
 					})
 					.catch((error) => {
 						console.error(error);

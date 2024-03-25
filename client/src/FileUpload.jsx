@@ -2,34 +2,29 @@ import { useState } from "react";
 
 const FileUpload = () => {
 	const [file, setFile] = useState(null);
-    const [cid, setCid] =useState("");
-    const [transaction,setTransaction]= useState("");
-
 	//it will handle the submition of the file
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-try{
-if (file) {
-			const formData = new FormData();
-			formData.append("file", file);
-			const response = await fetch("http://localhost:500/upload", {
-		method:'POST',
-        body:formData
-        }).then(response=>response.json())
-        .then(data)=>{
-            setCid(data.cid);
-            setTransaction(data.transactionHash)
-            console.log(data.cid)
-        })
-        .catch(error=>{
-            console.error(error);
-        })
-	}; 
-} catch(error){
-    alert(error);
-}
-}
-		
+		try {
+			if (file) {
+				const formData = new FormData();
+				formData.append("file", file);
+				const response = await fetch("http://localhost:4000/upload", {
+					method: "POST",
+					body: formData,
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						console.log(data.cid);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			}
+		} catch (error) {
+			alert(error);
+		}
+	};
 
 	const retrieveFile = (event) => {
 		try {

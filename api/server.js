@@ -3,7 +3,7 @@ const multer = require("multer");
 const cors = require("cors");
 const axios = require("axios");
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 app.use(express.json());
 
@@ -23,9 +23,9 @@ const starton = axios.create({
 
 //this has sth to do with multer, to upload the files
 
-app.post("./upload", cors(), upload.single("file"), async (req, res) => {
-	let data = FormData();
-	const blob = new Blob([req.file.lbuffer], { type: req.file.mimetype });
+app.post("/upload", cors(), upload.single("file"), async (req, res) => {
+	let data = new FormData();
+	const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
 	data.append("file", blob, { filename: req.file.originalname });
 
 	//uploading the files on ipfs

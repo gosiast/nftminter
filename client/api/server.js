@@ -27,5 +27,39 @@ app.post("./upload", cors(), upload.single("file"), async (req, res) => {
 	let data = FormData();
 	const blob = new Blob([req.file.lbuffer], { type: req.file.mimetype });
 	data.append("file", blob, { filename: req.file.originalname });
-	data.append("isSync", "true");
+
+	//uploading the files on ipfs
+	async function uploadImageOnIpfs() {
+		const ipfsImg = await starton.post("/ipfs/file", data, {
+			headers: {
+				"Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+			},
+		});
+		//this is useful to get the CID of the image
+		return ipfsImg.data;
+	}
+	//uploading api metadata on ipfs
+	//it will have or data of our nft
+	//we have our img CID - unique identifier and we pass it to upload metadata
+	async function uploadMetadataOnIpfs(imgCid) {
+		const metadataJson = {
+			name: `A Wonderful NFT`,
+			description: `Probably the most awesome NFT ever created!`,
+			image: `ipfs://ipfs/${imgCid}`,
+		};
+
+		// i make a request to the pfs
+		const ipfsMetadata = await starton.post("/ipfs/json", {
+			name: "My NFT metadata Json",
+			content: metadataJson,
+			isSync: true,
+		});
+
+		//this is useful to get the Metadata of the image
+		return ipfsMetadata.data;
+	}
+
+	const ipfsImgData = await uploadImageOnIpfs();
+	const ipfsMetadata = await uploadMetadataOnIpfs(ipfsImgData.cid);
+	console.log(ipfsImgData, ipfsMetadata);
 });

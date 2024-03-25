@@ -62,4 +62,13 @@ app.post("./upload", cors(), upload.single("file"), async (req, res) => {
 	const ipfsImgData = await uploadImageOnIpfs();
 	const ipfsMetadata = await uploadMetadataOnIpfs(ipfsImgData.cid);
 	console.log(ipfsImgData, ipfsMetadata);
+
+	//res means response
+	res.status(201).json({
+		cid: ipfsImgData.cid,
+	});
+});
+//we need to listen to this
+app.listen(port, () => {
+	console.log("Server is running on port " + port);
 });

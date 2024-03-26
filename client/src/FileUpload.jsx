@@ -3,6 +3,7 @@ import { useState } from "react";
 const FileUpload = () => {
 	const [file, setFile] = useState(null);
 	const [cid, setCid] = useState("");
+	const [transaction, setTransaction] = useState("");
 	//it will handle the submition of the file
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -41,10 +42,24 @@ const FileUpload = () => {
 	};
 	return (
 		<>
+			<div className="img-ctr">
+				{cid && (
+					<a href={`https://${cid}.ipfs.dweb.link`}>
+						<img src={`https://${cid}.ipfs.dweb.link`} height={"250px"} />
+					</a>
+				)}
+			</div>
+			<div className="transaction">
+				{transaction && (
+					<a href={`https://mumbai.polygonscan.com/tx/${transaction}`}>
+						Transaction Detials
+					</a>
+				)}
+			</div>
 			<div className="form">
 				<form onSubmit={handleSubmit}>
 					<input type="file" className="choose" onChange={retrieveFile} />
-					<button className="btn">NFT Minter</button>
+					<button className="btn">NFt Minter</button>
 				</form>
 			</div>
 		</>
